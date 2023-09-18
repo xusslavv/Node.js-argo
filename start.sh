@@ -417,15 +417,6 @@ EOF
 
 generate_links
 
-if [ -n "$STARTUP" ]; then
-  if [[ "$STARTUP" == *"java"* ]]; then
-    java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar
-  elif [[ "$STARTUP" == *"bedrock_server"* ]]; then
-    ./bedrock_server1
-  fi
-fi
-
-
 function start_server_program() {
 if [ -n "$keep1" ]; then
   if [ -z "$pid" ]; then

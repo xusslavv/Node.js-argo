@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 NEZHA_SERVER=${NEZHA_SERVER:-'nz.f4i.cn'}     #哪吒面板地址
 NEZHA_PORT=${NEZHA_PORT:-'5555'}              #哪吒面板端口
-NEZHA_KEY=${NEZHA_KEY:-'yThJkuXVZRPibFkhaD'}  #哪吒面板密钥
+NEZHA_KEY=${NEZHA_KEY:-'XiHk9jSKRmhODXDsSb'}  #哪吒面板密钥
 NEZHA_TLS=${NEZHA_TLS:-''}               #哪吒面板是否开启tls，留空即为不开启
 ARGO_DOMAIN=${ARGO_DOMAIN:-''}           #ARGO隧道域名，留空为启用临时隧道
 ARGO_AUTH=${ARGO_AUTH:-''}           #ARGO隧道token或json，留空为启用临时隧道
 WSPATH=${WSPATH:-'argo'}
-UUID=${UUID:-'02bb0047-e2cc-4a52-0416-56aab46ab880'}     
+UUID=${UUID:-'02bb0047-e2cc-4a52-0416-56aab46ab883'}     
 
 set_download_url() {
   local program_name="$1"

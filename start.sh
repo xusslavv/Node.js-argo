@@ -6,6 +6,7 @@ NEZHA_TLS=${NEZHA_TLS:-''}               #哪吒面板是否开启tls，留空�
 ARGO_DOMAIN=${ARGO_DOMAIN:-''}           #ARGO隧道域名，留空为启用临时隧道
 ARGO_AUTH=${ARGO_AUTH:-''}           #ARGO隧道token或json，留空为启用临时隧道
 WSPATH=${WSPATH:-'argo'}
+CFIP=${CFIP:-'skk.moe'}
 UUID=${UUID:-'02bb0047-e2cc-4a52-0416-56aab46ab883'}     
 
 set_download_url() {
@@ -364,49 +365,49 @@ generate_links() {
   argo=$(get_argo_domain)
   sleep 1
 
-  VMESS="{ \"v\": \"2\", \"ps\": \"${isp}-vm\", \"add\": \"skk.moe\", \"port\": \"443\", \"id\": \"${UUID}\", \"aid\": \"0\", \"scy\": \"none\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"${argo}\", \"path\": \"/${WSPATH}-vmess?ed=2048\", \"tls\": \"tls\", \"sni\": \"${argo}\", \"alpn\": \"\" }"
+  VMESS="{ \"v\": \"2\", \"ps\": \"VMESS-${isp}\", \"add\": \"${CFIP}\", \"port\": \"443\", \"id\": \"${UUID}\", \"aid\": \"0\", \"scy\": \"none\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"${argo}\", \"path\": \"/${WSPATH}-vmess?ed=2048\", \"tls\": \"tls\", \"sni\": \"${argo}\", \"alpn\": \"\" }"
 
   cat > list.txt <<EOF
 *******************************************
-skk.moe 可替换为CF优选IP,端口 443 可改为 2053 2083 2087 2096 8443
+${CFIP} 可替换为CF优选IP,端口 443 可改为 2053 2083 2087 2096 8443
 ----------------------------
 V2-rayN:
 ----------------------------
-vless://${UUID}@skk.moe:443?encryption=none&security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-vless?ed=2048#${isp}-Vl
+vless://${UUID}@${CFIP}:443?encryption=none&security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-vless?ed=2048#VLESS-${isp}
 ----------------------------
 vmess://$(echo "$VMESS" | base64 -w0)
 ----------------------------
-trojan://${UUID}@skk.moe:443?security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-trojan?ed=2048#${isp}-Tr
+trojan://${UUID}@${CFIP}:443?security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-trojan?ed=2048#Trojan-${isp}
 ----------------------------
-ss://$(echo "chacha20-ietf-poly1305:${UUID}@skk.moe:443" | base64 -w0)@skk.moe:443#${isp}-SS
+ss://$(echo "chacha20-ietf-poly1305:${UUID}@${CFIP}:443" | base64 -w0)@${CFIP}:443#SSR-${isp}
 由于该软件导出的链接不全，请自行处理如下: 传输协议: WS ， 伪装域名: ${argo} ，路径: /${WSPATH}-shadowsocks?ed=2048 ， 传输层安全: tls ， sni: ${argo}
 *******************************************
 Shadowrocket:
 ----------------------------
-vless://${UUID}@skk.moe:443?encryption=none&security=tls&type=ws&host=${argo}&path=/${WSPATH}-vless?ed=2048&sni=${argo}#${isp}-Vl
+vless://${UUID}@${CFIP}:443?encryption=none&security=tls&type=ws&host=${argo}&path=/${WSPATH}-vless?ed=2048&sni=VLESS-${argo}#${isp}
 ----------------------------
-vmess://$(echo "none:${UUID}@skk.moe:443" | base64 -w0)?remarks=${isp}-Vm&obfsParam=${argo}&path=/${WSPATH}-vmess?ed=2048&obfs=websocket&tls=1&peer=${argo}&alterId=0
+vmess://$(echo "none:${UUID}@${CFIP}:443" | base64 -w0)?remarks=${isp}-Vm&obfsParam=${argo}&path=/${WSPATH}-vmess?ed=2048&obfs=websocket&tls=1&peer=${argo}&alterId=0
 ----------------------------
-trojan://${UUID}@skk.moe:443?peer=${argo}&plugin=obfs-local;obfs=websocket;obfs-host=${argo};obfs-uri=/${WSPATH}-trojan?ed=2048#${isp}-Tr
+trojan://${UUID}@${CFIP}:443?peer=${argo}&plugin=obfs-local;obfs=websocket;obfs-host=${argo};obfs-uri=/${WSPATH}-trojan?ed=2048#Trojan-${isp}
 ----------------------------
-ss://$(echo "chacha20-ietf-poly1305:${UUID}@skk.moe:443" | base64 -w0)?obfs=wss&obfsParam=${argo}&path=/${WSPATH}-shadowsocks?ed=2048#${isp}-Ss
+ss://$(echo "chacha20-ietf-poly1305:${UUID}@${CFIP}:443" | base64 -w0)?obfs=wss&obfsParam=${argo}&path=/${WSPATH}-shadowsocks?ed=2048#SSR-${isp}
 *******************************************
 Clash:
 ----------------------------
-- {name: ${isp}-Vless, type: vless, server: skk.moe, port: 443, uuid: ${UUID}, tls: true, servername: ${argo}, skip-cert-verify: false, network: ws, ws-opts: {path: /${WSPATH}-vless?ed=2048, headers: { Host: ${argo}}}, udp: true}
+- {name: ${isp}-Vless, type: vless, server: ${CFIP}, port: 443, uuid: ${UUID}, tls: true, servername: ${argo}, skip-cert-verify: false, network: ws, ws-opts: {path: /${WSPATH}-vless?ed=2048, headers: { Host: ${argo}}}, udp: true}
 ----------------------------
-- {name: ${isp}-Vmess, type: vmess, server: skk.moe, port: 443, uuid: ${UUID}, alterId: 0, cipher: none, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /${WSPATH}-vmess?ed=2048, headers: {Host: ${argo}}}, udp: true}
+- {name: ${isp}-Vmess, type: vmess, server: ${CFIP}, port: 443, uuid: ${UUID}, alterId: 0, cipher: none, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /${WSPATH}-vmess?ed=2048, headers: {Host: ${argo}}}, udp: true}
 ----------------------------
-- {name: ${isp}-Trojan, type: trojan, server: skk.moe, port: 443, password: ${UUID}, udp: true, tls: true, sni: ${argo}, skip-cert-verify: false, network: ws, ws-opts: { path: /${WSPATH}-trojan?ed=2048, headers: { Host: ${argo} } } }
+- {name: ${isp}-Trojan, type: trojan, server: ${CFIP}, port: 443, password: ${UUID}, udp: true, tls: true, sni: ${argo}, skip-cert-verify: false, network: ws, ws-opts: { path: /${WSPATH}-trojan?ed=2048, headers: { Host: ${argo} } } }
 ----------------------------
-- {name: ${isp}-Shadowsocks, type: ss, server: skk.moe, port: 443, cipher: chacha20-ietf-poly1305, password: ${UUID}, plugin: v2ray-plugin, plugin-opts: { mode: websocket, host: ${argo}, path: /${WSPATH}-shadowsocks?ed=2048, tls: true, skip-cert-verify: false, mux: false } }
+- {name: ${isp}-Shadowsocks, type: ss, server: ${CFIP}, port: 443, cipher: chacha20-ietf-poly1305, password: ${UUID}, plugin: v2ray-plugin, plugin-opts: { mode: websocket, host: ${argo}, path: /${WSPATH}-shadowsocks?ed=2048, tls: true, skip-cert-verify: false, mux: false } }
 *******************************************
 EOF
 
 #  cat > encode.txt <<EOF
-#vless://${UUID}@skk.moe:443?encryption=none&security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-vless?ed=2048#${isp}-Vl
+#vless://${UUID}@${CFIP}:443?encryption=none&security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-vless?ed=2048#VLESS-${isp}
 #vmess://$(echo "$VMESS" | base64 -w0)
-#trojan://${UUID}@skk.moe:443?security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-trojan?ed=2048#${isp}-Tr
+#trojan://${UUID}@${CFIP}:443?security=tls&sni=${argo}&type=ws&host=${argo}&path=%2F${WSPATH}-trojan?ed=2048#Trojan-${isp}
 #EOF
 
 # # base64 -w0 encode.txt > sub.txt 

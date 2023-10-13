@@ -13,7 +13,6 @@ const auth = require("basic-auth");
 const axios = require('axios');
 const os = require('os');
 
-
 app.get("/", function(req, res) {
   res.send("hello world");
 });
@@ -26,7 +25,6 @@ app.get("/list", (req, res) => {
     user.name === username &&
     user.pass === password
   ) {
-    // 用户名和密码匹配，允许访问 list.txt 文件
     fs.readFile("list.txt", "utf8", (err, data) => {
       if (err) {
         console.error(err);
@@ -36,7 +34,6 @@ app.get("/list", (req, res) => {
       }
     });
   } else {
-    // 用户名和密码不匹配，发送401 Unauthorized响应
     res.set("WWW-Authenticate", 'Basic realm="Node"');
     res.status(401).send("Unauthorized");
   }
